@@ -62,15 +62,15 @@ pub fn get_movies() -> HashMap<Movie, i32> {
     let mut movies = HashMap::new();
 
     let lines: Vec<String> = match read_lines(MOVIE_LIST) {
-        Ok(lines) => lines.filter_map(|line_str| {
-            match line_str {
+        Ok(lines) => lines
+            .filter_map(|line_str| match line_str {
                 Ok(str) => Some(str),
                 Err(_) => {
                     eprintln!("Interrupted while reading movie list {}", MOVIE_LIST);
                     return None;
                 }
-            }
-        }).collect(),
+            })
+            .collect(),
         Err(_) => {
             eprintln!("Could not read movie list {}", MOVIE_LIST);
             return movies;
@@ -101,14 +101,23 @@ pub fn get_movies() -> HashMap<Movie, i32> {
             }
         };
 
-        movies.insert(Movie { id, title, director }, fsk);
+        movies.insert(
+            Movie {
+                id,
+                title,
+                director,
+            },
+            fsk,
+        );
     }
 
     return movies;
 }
 
 fn read_str<P>(filename: P) -> io::Result<String>
-    where P: AsRef<Path>, {
+where
+    P: AsRef<Path>,
+{
     let file = File::open(filename)?;
     let mut out = String::new();
     io::BufReader::new(file).read_to_string(&mut out)?;
@@ -116,7 +125,9 @@ fn read_str<P>(filename: P) -> io::Result<String>
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-    where P: AsRef<Path>, {
+where
+    P: AsRef<Path>,
+{
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
 }

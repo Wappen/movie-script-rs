@@ -4,38 +4,49 @@ use std::io;
 use std::io::Write;
 use std::str::FromStr;
 
-pub enum InputError<T: FromStr> where T::Err: Error {
+pub enum InputError<T: FromStr>
+where
+    T::Err: Error,
+{
     FalsePredicate,
     Parse(T::Err),
 }
 
-impl<T: FromStr> Display for InputError<T> where T::Err: Error {
+impl<T: FromStr> Display for InputError<T>
+where
+    T::Err: Error,
+{
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match *self {
-            InputError::FalsePredicate =>
-                write!(f, "input predicate returned false"),
-            InputError::Parse(..) =>
-                write!(f, "the input could not be parsed into the desired type"),
+            InputError::FalsePredicate => write!(f, "input predicate returned false"),
+            InputError::Parse(..) => {
+                write!(f, "the input could not be parsed into the desired type")
+            }
         }
     }
 }
 
-impl<T: FromStr> Debug for InputError<T> where T::Err: Error {
+impl<T: FromStr> Debug for InputError<T>
+where
+    T::Err: Error,
+{
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match *self {
             InputError::FalsePredicate => write!(f, "FalsePredicate"),
-            InputError::Parse(_) => write!(f, "Parse")
+            InputError::Parse(_) => write!(f, "Parse"),
         }
     }
 }
 
 impl<T: FromStr> Error for InputError<T> where T::Err: Error {}
 
-pub fn get_input<T, P, F>(msg: &str, pred: P, on_err: F) -> T where
+pub fn get_input<T, P, F>(msg: &str, pred: P, on_err: F) -> T
+where
     T: FromStr,
     T::Err: Error,
     P: Fn(&T) -> bool,
-    F: Fn(&InputError<T>) {
+    F: Fn(&InputError<T>),
+{
     loop {
         let mut buffer = String::new();
 
@@ -51,9 +62,7 @@ pub fn get_input<T, P, F>(msg: &str, pred: P, on_err: F) -> T where
                     on_err(&InputError::FalsePredicate)
                 }
             }
-            Err(e) => {
-                on_err(&InputError::Parse(e))
-            }
+            Err(e) => on_err(&InputError::Parse(e)),
         }
     }
 }
