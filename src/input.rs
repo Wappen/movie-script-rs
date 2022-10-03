@@ -31,11 +31,11 @@ impl<T: FromStr> Debug for InputError<T> where T::Err: Error {
 
 impl<T: FromStr> Error for InputError<T> where T::Err: Error {}
 
-pub fn get_input<T: FromStr, P: Fn(&T) -> bool, F: Fn(&InputError<T>)>(
-    msg: &str,
-    pred: P,
-    on_err: F
-) -> T where T::Err: Error {
+pub fn get_input<T, P, F>(msg: &str, pred: P, on_err: F) -> T where
+    T: FromStr,
+    T::Err: Error,
+    P: Fn(&T) -> bool,
+    F: Fn(&InputError<T>) {
     loop {
         let mut buffer = String::new();
 

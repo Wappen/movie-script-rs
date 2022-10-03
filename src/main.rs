@@ -12,10 +12,10 @@ fn main() {
     let movies = movie::get_movies();
 
     let age: i32 = {
-        let age_pred = |age: &i32| *age >= 0;
+        let age_pred = |age: &i32| *age >= 0 && *age <= 150;
         let on_error = |e: &InputError<i32>| {
             match e {
-                InputError::FalsePredicate => println!("Try again! The age must be positive."),
+                InputError::FalsePredicate => println!("Try again! The age must be between 0 and 150."),
                 InputError::Parse(_) => println!("Try again! The age must be a number."),
             };
         };
