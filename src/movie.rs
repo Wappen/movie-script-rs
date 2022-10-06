@@ -34,9 +34,9 @@ impl Watch for Movie {
             }
         };
 
-        let parts: Vec<&str> = movie.split("---\n").collect();
+        let parts = movie.split("---\n");
 
-        for part in parts.into_iter() {
+        for part in parts {
             sleep(Duration::from_secs(2));
             print!("{}", part);
             io::stdout().flush().unwrap();
@@ -46,7 +46,7 @@ impl Watch for Movie {
 
 impl PartialEq<Self> for Movie {
     fn eq(&self, other: &Self) -> bool {
-        return self.id == other.id;
+        self.id == other.id
     }
 }
 
@@ -67,7 +67,7 @@ pub fn get_movies() -> HashMap<Movie, i32> {
                 Ok(str) => Some(str),
                 Err(_) => {
                     eprintln!("Interrupted while reading movie list {}", MOVIE_LIST);
-                    return None;
+                    None
                 }
             })
             .collect(),
@@ -82,7 +82,7 @@ pub fn get_movies() -> HashMap<Movie, i32> {
             continue;
         }
 
-        let parts: Vec<&str> = line.split(",").collect();
+        let parts: Vec<&str> = line.split(',').collect();
         let id = match i64::from_str_radix(parts[0].trim(), 16) {
             Ok(i) => i,
             Err(_) => {
@@ -111,7 +111,7 @@ pub fn get_movies() -> HashMap<Movie, i32> {
         );
     }
 
-    return movies;
+    movies
 }
 
 fn read_str<P>(filename: P) -> io::Result<String>

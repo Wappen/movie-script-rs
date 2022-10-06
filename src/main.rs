@@ -34,7 +34,7 @@ fn main() {
     // Sort alphabetically by title
     watchable_movies.sort_by(|(m1, _), (m2, _)| m1.title.partial_cmp(&m2.title).unwrap());
 
-    for (index, (movie, fsk)) in (&watchable_movies).into_iter().enumerate() {
+    for (index, (movie, fsk)) in (&watchable_movies).iter().enumerate() {
         let colored_fsk = colorize_fsk(fsk);
         let title = movie.title.bold();
         let director = &movie.director;
